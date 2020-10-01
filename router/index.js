@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
     res.send('Hello Node.js')
 })
 
-// 路由嵌套
+//  通过 userRouter 来处理 /user 路由下的所有子路由，对路由处理进行解耦，实现路由嵌套
 router.use('/user', userRouter)
 
 /**
