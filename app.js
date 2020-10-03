@@ -1,3 +1,10 @@
+/*
+* @Time    : 2020/10/2 23:49
+* @Author  : DannyDong
+* @File    : app.js
+* @Description: App主文件
+*/
+
 const express = require('express')
 const router = require('./router')
 
