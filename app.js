@@ -13,8 +13,10 @@ const cors = require('cors');
 // 初始化app，创建 express 应用
 const app = express();
 
+// 请求参数解析
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+// 跨域处理
 app.use(cors());
 
 // 将整个router作为中间件来管理

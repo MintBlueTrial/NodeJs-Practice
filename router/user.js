@@ -9,6 +9,7 @@ const express = require('express');
 
 const router = express.Router();
 
+// 用户登录请求
 router.post('/login', function(req, res) {
     console.log(req.body);
     res.json({
