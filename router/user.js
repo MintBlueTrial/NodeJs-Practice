@@ -8,10 +8,11 @@
 const boom = require('boom');
 const {md5} = require('../utils');
 const {login} = require('../services/user');
-const {PWD_SALT} = require('../utils/constant');
+const {PWD_SALT, JWT_EXPIRED, PRIVATE_KEY} = require('../utils/constant');
 const express = require('express');
 const Result = require('../models/Result');
 const {body, validationResult} = require('express-validator');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -28,8 +29,6 @@ router.post('/login', loginInfoCheck, function(req, res, next) {
         const [{msg}] = err.errors;
         next(boom.badRequest(msg));
     } else {
-        // 初始化Result类
-        let result = new Result();
         // 获取参数
         let {username, password} = req.body;
         // 密码加密
@@ -37,9 +36,13 @@ router.post('/login', loginInfoCheck, function(req, res, next) {
         // 登录逻辑处理
         login(username, password).then(user => {
             if (!user || user.length === 0) {
-                result.fail(res);
+                new Result('登录失败').fail(res);
             } else {
-                result.success(res);
+                // 登录成功后生成token
+                const token = jwt.sign(
+                    {username}, PRIVATE_KEY, {expiresIn: JWT_EXPIRED},
+                );
+                new Result({token}, '登录成功').success(res);
             }
         });
     }

@@ -10,4 +10,6 @@ module.exports = {
     CODE_SUCCESS: 0,
     DEBUG: true,
     PWD_SALT: 'DDDDanny',
+    PRIVATE_KEY: 'MintBlue',
+    JWT_EXPIRED: 60 * 60,
 }

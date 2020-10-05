@@ -44,7 +44,6 @@ class Result {
 
     fail(res) {
         this.code = CODE_ERROR;
-        this.msg = '请求失败';
         this.json(res);
     }
 }
