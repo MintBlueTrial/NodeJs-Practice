@@ -6,16 +6,20 @@
 */
 
 const express = require('express');
+const Result = require('../models/Result');
 
 const router = express.Router();
 
 // 用户登录请求
 router.post('/login', function(req, res) {
     console.log(req.body);
-    res.json({
-        code: 0,
-        msg: '登录成功',
-    });
+    let result = new Result();
+    const {userName, pwd} = req.body;
+    if (userName === 'admin' && pwd === 'admin') {
+        result.success(res);
+    } else {
+        result.fail(res);
+    }
 });
 
 // 用户信息相关路由
