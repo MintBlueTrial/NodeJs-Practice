@@ -5,7 +5,7 @@
 * @Description: 响应结果
 */
 
-const {CODE_ERROR, CODE_SUCCESS} = require('../utils/constant');
+const {CODE_ERROR, CODE_SUCCESS, CODE_TOKEN_EXP} = require('../utils/constant');
 
 class Result {
     // 构造函数
@@ -44,6 +44,11 @@ class Result {
 
     fail(res) {
         this.code = CODE_ERROR;
+        this.json(res);
+    }
+
+    tokenErr(res) {
+        this.code = CODE_TOKEN_EXP;
         this.json(res);
     }
 }

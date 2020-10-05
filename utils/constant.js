@@ -8,6 +8,7 @@
 module.exports = {
     CODE_ERROR: -1,
     CODE_SUCCESS: 0,
+    CODE_TOKEN_EXP: -2,
     DEBUG: true,
     PWD_SALT: 'DDDDanny',
     PRIVATE_KEY: 'MintBlue',
