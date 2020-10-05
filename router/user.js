@@ -6,8 +6,8 @@
 */
 
 const boom = require('boom');
-const {md5} = require('../utils');
-const {login} = require('../services/user');
+const {md5, decode} = require('../utils');
+const {login, findUserInfo} = require('../services/user');
 const {PWD_SALT, JWT_EXPIRED, PRIVATE_KEY} = require('../utils/constant');
 const express = require('express');
 const Result = require('../models/Result');
@@ -49,8 +49,23 @@ router.post('/login', loginInfoCheck, function(req, res, next) {
 });
 
 // 用户信息相关路由
-router.get('/info', function(req, res, next) {
-    res.json('user info...');
+router.get('/info', function(req, res) {
+    // 解析JWT
+    const decoded = decode(req);
+    if (decoded && decoded.username) {
+        findUserInfo(decoded.username).then(user => {
+            console.log(user);
+            user.roles = [user.role];
+            if (user) {
+                new Result(user, '用户信息查询成功').success(res);
+            } else {
+                new Result('用户信息查询失败').fail(res);
+            }
+        });
+    } else {
+        new Result('用户信息查询失败').fail(res);
+    }
+
 });
 
 module.exports = router;

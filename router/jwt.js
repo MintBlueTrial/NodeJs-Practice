@@ -15,7 +15,7 @@ const jwtAuth = expressJwt({
 }).unless({
     path: [
         '/',
-        '/user/login',
+        '/login',
     ], // 设置jwt白名单
 });
 
