@@ -9,10 +9,10 @@ const {CODE_ERROR, CODE_SUCCESS} = require('../utils/constant');
 
 class Result {
     // 构造函数
-    constructor(data, msg = '操作成功', options) {
+    constructor(data, msg = '请求成功', options) {
         this.data = null;
         if (arguments.length === 0) {
-            this.msg = '操作成功';
+            this.msg = '请求成功';
         } else if (arguments.length === 1) {
             this.msg = data;
         } else {
@@ -44,7 +44,7 @@ class Result {
 
     fail(res) {
         this.code = CODE_ERROR;
-        this.msg = '操作失败';
+        this.msg = '请求失败';
         this.json(res);
     }
 }
