@@ -100,25 +100,50 @@ class Book {
                         this.author = creator || creatorFileAs || 'Unknown';
                         this.publisher = publisher;
                         this.rootFile = epub.rootFile;
-                        const handleGetImage = (err, file, mimeType) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                const suffix = mimeType.split('/')[1];
-                                const coverPath = `${UPLOAD_PATH}/img/${this.fileName}.${suffix}`;
-                                const coverUrl = `${UPLOAD_URL}/img/${this.fileName}.${suffix}`;
-                                fs.writeFileSync(coverPath, file, 'binary');
-                                this.coverPath = `/img/${this.filename}.${suffix}`;
-                                this.cover = coverUrl;
-                                resolve(this);
-                            }
-                        };
-                        epub.getImage(cover, handleGetImage);
+                        try {
+                            this.unzip();
+                            this.parseContents(epub);
+                            const handleGetImage = (err, file, mimeType) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    const suffix = mimeType.split('/')[1];
+                                    const coverPath = `${UPLOAD_PATH}/img/${this.fileName}.${suffix}`;
+                                    const coverUrl = `${UPLOAD_URL}/img/${this.fileName}.${suffix}`;
+                                    fs.writeFileSync(coverPath, file, 'binary');
+                                    this.coverPath = `/img/${this.filename}.${suffix}`;
+                                    this.cover = coverUrl;
+                                    resolve(this);
+                                }
+                            };
+                            epub.getImage(cover, handleGetImage);
+                        } catch (e) {
+                            reject(e);
+                        }
                     }
                 }
             });
             epub.parse();
         });
+    }
+
+    // 解压
+    unzip() {
+        const AdmZip = require('adm-zip');
+        const zip = new AdmZip(Book.genPath(this.path));
+        zip.extractAllTo(Book.genPath(this.unzipPath), true);
+    }
+
+    parseContents(epub) {
+
+    }
+
+    // 获取绝对路径
+    static genPath(path) {
+        if (path.startsWith('/')) {
+            path = `/${path}`;
+        }
+        return `${UPLOAD_PATH}${path}`;
     }
 }
 
