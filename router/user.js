@@ -32,7 +32,7 @@ router.post('/login', loginInfoCheck, function(req, res, next) {
         // 获取参数
         let {username, password} = req.body;
         // 密码加密
-        password = md5(`${password}${PWD_SALT}`);
+        // password = md5(`${password}${PWD_SALT}`);
         // 登录逻辑处理
         login(username, password).then(user => {
             if (!user || user.length === 0) {

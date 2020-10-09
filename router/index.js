@@ -8,6 +8,7 @@
 const express = require('express');
 const boom = require('boom');
 const userRouter = require('./user');
+const bookRouter = require('./book');
 const jwtAuth = require('./jwt');
 const Result = require('../models/Result');
 
@@ -24,14 +25,17 @@ router.get('/', function(req, res) {
 //  通过 userRouter 来处理 /user 路由下的所有子路由，对路由处理进行解耦，实现路由嵌套
 router.use('/user', userRouter);
 
+//  通过 bookRouter 来处理 /book 路由下的所有子路由，对路由处理进行解耦，实现路由嵌套
+router.use('/book', bookRouter);
+
 /**
  * 集中处理404请求的中间件
  * 注意：该中间件必须放在正常处理流程之后
  * 否则正常请求会被拦截
  * */
 router.use((req, res, next) => {
-    next(boom.notFound('哦吼，404了'))
-})
+    next(boom.notFound('哦吼，404了'));
+});
 
 /**
  * 自定义路由异常处理中间件
