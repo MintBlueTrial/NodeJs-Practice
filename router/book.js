@@ -24,8 +24,7 @@ router.post(
         } else {
             const book = new Book(req.file);
             book.parse().then(book => {
-                console.log(book);
-                new Result('上传电子书成功').success(res);
+                new Result(book, '上传电子书成功').success(res);
             }).catch(err => {
                 next(boom.badImplementation(err));
             });
