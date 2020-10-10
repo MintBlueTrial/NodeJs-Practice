@@ -43,11 +43,10 @@ router.post(
         }
         const book = new Book(null, req.body);
         bookService.insertBook(book).then(() => {
-
+            new Result('添加电子书成功').success(res);
         }).catch(err => {
             next(boom.badImplementation(err));
         });
-        console.log(book);
     },
 );
 
