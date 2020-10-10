@@ -65,7 +65,7 @@ class Book {
         this.language = '';  // 语言
         this.unzipUrl = unzipUrl;  // 解压后文件夹连接
         this.originalName = originalname;  // 电子书文件原名
-
+        this.contentsTree = [];  // 树状目录结构
     }
 
     // 插入电子书数据
@@ -115,10 +115,12 @@ class Book {
                         };
                         try {
                             this.unzip();
-                            this.parseContents(epub).then(({chapters}) => {
-                                this.contents = chapters;
-                                epub.getImage(cover, handleGetImage);
-                            });
+                            this.parseContents(epub).
+                                then(({chapters, chapterTree}) => {
+                                    this.contents = chapters;
+                                    this.contentsTree = chapterTree;
+                                    epub.getImage(cover, handleGetImage);
+                                });
                             epub.getImage(cover, handleGetImage);
                         } catch (e) {
                             reject(e);
@@ -213,7 +215,18 @@ class Book {
                                 chapter.order = index + 1;
                                 chapters.push(chapter);
                             });
-                            resolve({chapters});
+                            const chapterTree = [];
+                            chapters.forEach(c => {
+                                c.children = [];
+                                if (c.pid === '') {
+                                    chapterTree.push(c);
+                                } else {
+                                    const parent = chapters.find(
+                                        _ => _.navId === c.pid);
+                                    parent.children.push(c);
+                                }
+                            });
+                            resolve({chapters, chapterTree});
                         } else {
                             reject(new Error('目录解析失败'));
                         }
