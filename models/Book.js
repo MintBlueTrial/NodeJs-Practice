@@ -64,7 +64,7 @@ class Book {
         this.categoryText = '';  // 分类名称
         this.language = '';  // 语言
         this.unzipUrl = unzipUrl;  // 解压后文件夹连接
-        this.originalname = originalname;  // 电子书文件原名
+        this.originalName = originalname;  // 电子书文件原名
 
     }
 
