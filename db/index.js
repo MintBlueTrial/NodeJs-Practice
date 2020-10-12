@@ -31,7 +31,7 @@ function querySql(sql) {
                     DEBUG && console.log('查询失败，原因：' + JSON.stringify(err));
                     reject(err);
                 } else {
-                    DEBUG && console.log('查询成功，结果：' + JSON.stringify(results));
+                    // DEBUG && console.log('查询成功，结果：' + JSON.stringify(results));
                     resolve(results);
                 }
             });

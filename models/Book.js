@@ -128,7 +128,7 @@ class Book {
                                 const coverPath = `${UPLOAD_PATH}/img/${this.fileName}.${suffix}`;
                                 const coverUrl = `${UPLOAD_URL}/img/${this.fileName}.${suffix}`;
                                 fs.writeFileSync(coverPath, file, 'binary');
-                                this.coverPath = `/img/${this.filename}.${suffix}`;
+                                this.coverPath = `/img/${this.fileName}.${suffix}`;
                                 this.cover = coverUrl;
                                 resolve(this);
                             }
@@ -283,12 +283,37 @@ class Book {
         return this.contents;
     }
 
+    reset() {
+        console.log(this.coverPath);
+        if (Book.pathExists(this.filePath)) {
+            fs.unlinkSync(Book.genPath(this.filePath));
+            console.log('删除文件……');
+        }
+        if (Book.pathExists(this.coverPath)) {
+            fs.unlinkSync(Book.genPath(this.coverPath));
+            console.log('删除封面……');
+        }
+        if (Book.pathExists(this.unzipPath)) {
+            fs.rmdirSync(Book.genPath(this.unzipPath), {recursive: true});
+            console.log('删除解压目录……');
+        }
+    }
+
     // 获取绝对路径
     static genPath(path) {
         if (path.startsWith('/')) {
             path = `/${path}`;
         }
         return `${UPLOAD_PATH}${path}`;
+    }
+
+    // 判断路径是否存在
+    static pathExists(path) {
+        if (path.startsWith(UPLOAD_PATH)) {
+            return fs.existsSync(path);
+        } else {
+            return fs.existsSync(Book.genPath(path));
+        }
     }
 }
 

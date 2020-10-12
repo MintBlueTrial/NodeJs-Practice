@@ -9,12 +9,23 @@ const Book = require('../models/Book');
 const db = require('../db');
 const _ = require('lodash');
 
+// 判断电子书是否存在
 function exists(book) {
-
+    const {title, author, publisher} = book;
+    const sql = `select * from book where title='${title}' and author='${author}' and publisher='${publisher}'`;
+    return db.queryOneSql(sql);
 }
 
-function removeBook(book) {
-
+async function removeBook(book) {
+    if (book) {
+        book.reset();
+        if (book.fileName) {
+            const removeBookSql = `delete from book where fileName = '${book.fileName}'`;
+            const removeContent = `delete from contents where fileName='${book.fileName}'`;
+            await db.querySql(removeBookSql);
+            await db.querySql(removeContent);
+        }
+    }
 }
 
 async function insertContents(book) {
