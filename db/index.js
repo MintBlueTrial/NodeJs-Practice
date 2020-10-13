@@ -99,6 +99,40 @@ function insert(model, tableName) {
     });
 }
 
+// 更新数据
+function update(model, tableName, where) {
+    return new Promise((resolve, reject) => {
+        if (!isObject(model)) {
+            reject(new Error('插入数据库失败'));
+        } else {
+            const entry = [];
+            Object.keys(model).forEach(key => {
+                if (model.hasOwnProperty(key)) {
+                    entry.push(`\`${key}\`='${model[key]}'`);
+                }
+            });
+            if (entry.length > 0) {
+                let sql = `UPDATE \`${tableName}\` SET`;
+                sql = `${sql} ${entry.join(',')} ${where}`;
+                const conn = connect();
+                try {
+                    conn.query(sql, (err, result) => {
+                        if (err) {
+                            reject(err);
+                        } else {
+                            resolve(result);
+                        }
+                    });
+                } catch (e) {
+                    reject(e);
+                } finally {
+                    conn.end();
+                }
+            }
+        }
+    });
+}
+
 module.exports = {
-    querySql, queryOneSql, insert,
+    querySql, queryOneSql, insert, update,
 };
