@@ -39,6 +39,8 @@ async function insertContents(book) {
                 'href',
                 'order',
                 'level',
+                'text',
+                'label',
                 'pid',
                 'navId',
             ]);
@@ -69,6 +71,23 @@ function insertBook(book) {
     });
 }
 
+function getBook(fileName) {
+    return new Promise(async (resolve, reject) => {
+        const bookSql = `select * from book where fileName='${fileName}'`;
+        const contentsSql = `select * from contents where fileName='${fileName}' order by \`order\``;
+        const book = await db.queryOneSql(bookSql);
+        console.log(book);
+        const contents = await db.querySql(contentsSql);
+        if (book) {
+            book.cover = Book.genCoverUrl(book);
+            book.contentsTree = Book.genContentsTree(contents);
+            resolve(book);
+        } else {
+            reject(new Error('电子书不存在'));
+        }
+    });
+}
+
 module.exports = {
-    insertBook,
+    insertBook, getBook,
 };
