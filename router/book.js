@@ -34,6 +34,7 @@ router.post(
     },
 );
 
+// 新增图书信息
 router.post(
     '/create',
     function(req, res, next) {
@@ -50,6 +51,7 @@ router.post(
     },
 );
 
+// 更新图书信息
 router.post(
   '/update',
   function(req, res, next) {
@@ -66,6 +68,7 @@ router.post(
   },
 );
 
+// 获取图书信息
 router.get(
   '/get',
   function(req, res, next) {

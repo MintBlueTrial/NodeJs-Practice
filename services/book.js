@@ -16,6 +16,7 @@ function exists(book) {
     return db.queryOneSql(sql);
 }
 
+// 移除图书
 async function removeBook(book) {
     if (book) {
         book.reset();
@@ -28,6 +29,7 @@ async function removeBook(book) {
     }
 }
 
+// 插入目录信息
 async function insertContents(book) {
     const contents = book.getContents();
     if (contents && contents.length > 0) {
@@ -49,6 +51,7 @@ async function insertContents(book) {
     }
 }
 
+// 插入图书信息
 function insertBook(book) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -71,6 +74,7 @@ function insertBook(book) {
     });
 }
 
+// 更新图书信息
 function updateBook(book) {
     return new Promise(async (resolve, reject) => {
         try {
@@ -95,6 +99,7 @@ function updateBook(book) {
     });
 }
 
+// 获取图书信息
 function getBook(fileName) {
     return new Promise(async (resolve, reject) => {
         const bookSql = `select * from book where fileName='${fileName}'`;
