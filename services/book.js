@@ -117,6 +117,21 @@ function getBook(fileName) {
     });
 }
 
+// 获取图书分类
+async function getCategory() {
+    const sql = 'select * from category order by category asc';
+    const res = await db.querySql(sql);
+    const categoryList = [];
+    res.forEach(item => {
+        categoryList.push({
+            label: item.categoryText,
+            value: item.category,
+            num: item.num,
+        });
+    });
+    return categoryList;
+}
+
 module.exports = {
-    insertBook, getBook, updateBook,
+    insertBook, getBook, updateBook, getCategory,
 };
