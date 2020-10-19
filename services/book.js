@@ -132,6 +132,18 @@ async function getCategory() {
     return categoryList;
 }
 
+// 获取图书列表
+async function listBook(query) {
+    const {category, author, title} = query;
+    let bookSql = 'select * from book';
+    let where = 'where';
+    if (where !== 'where') {
+        bookSql = `${bookSql} ${where}`;
+    }
+    const list = await db.querySql(bookSql);
+    return {list};
+}
+
 module.exports = {
-    insertBook, getBook, updateBook, getCategory,
+    insertBook, getBook, updateBook, getCategory, listBook,
 };
