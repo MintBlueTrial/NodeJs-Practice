@@ -134,7 +134,7 @@ async function getCategory() {
 
 // 获取图书列表
 async function listBook(query) {
-    const {category, author, title, page = 1, pageSize = 20} = query;
+    const {category, author, title, page = 1, pageSize = 20, sort} = query;
     // 计算偏移量
     const offset = (page - 1) * pageSize;
     let bookSql = 'select * from book';
@@ -144,6 +144,12 @@ async function listBook(query) {
     category && (where = db.and(where, 'category', category));
     if (where !== 'where') {
         bookSql = `${bookSql} ${where}`;
+    }
+    if (sort) {
+        const symbol = sort[0];
+        const column = sort.slice(1, sort.length);
+        const order = symbol === '+' ? 'asc' : 'desc';
+        bookSql = `${bookSql} order by \`${column}\` ${order}`;
     }
     bookSql = `${bookSql} limit ${pageSize} offset ${offset}`;
     const list = await db.querySql(bookSql);
