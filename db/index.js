@@ -133,6 +133,24 @@ function update(model, tableName, where) {
     });
 }
 
+// 组合where查询语句
+function and(where, k, v) {
+    if (where === 'where') {
+        return `${where} \`${k}\`='${v}'`;
+    } else {
+        return `${where} and \`${k}\`='${v}'`;
+    }
+}
+
+// 模糊查询
+function andLike(where, k, v) {
+    if (where === 'where') {
+        return `${where} \`${k}\` like '%${v}%'`;
+    } else {
+        return `${where} and \`${k}\` like '%${v}%'`;
+    }
+}
+
 module.exports = {
-    querySql, queryOneSql, insert, update,
+    querySql, queryOneSql, insert, update, and, andLike,
 };
