@@ -151,9 +151,15 @@ async function listBook(query) {
         const order = symbol === '+' ? 'asc' : 'desc';
         bookSql = `${bookSql} order by \`${column}\` ${order}`;
     }
+    let countSql = `select count(*) as count from book`;
+    if (where !== 'where') {
+        countSql = `${countSql} ${where}`;
+    }
+    const count = await db.querySql(countSql);
+    console.log(count);
     bookSql = `${bookSql} limit ${pageSize} offset ${offset}`;
     const list = await db.querySql(bookSql);
-    return {list};
+    return {list, count: count[0].count, page, pageSize};
 }
 
 module.exports = {
