@@ -156,9 +156,9 @@ async function listBook(query) {
         countSql = `${countSql} ${where}`;
     }
     const count = await db.querySql(countSql);
-    console.log(count);
     bookSql = `${bookSql} limit ${pageSize} offset ${offset}`;
     const list = await db.querySql(bookSql);
+    list.forEach(book => book.cover = Book.genCoverUrl(book));
     return {list, count: count[0].count, page, pageSize};
 }
 
