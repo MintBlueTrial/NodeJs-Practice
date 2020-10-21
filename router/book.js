@@ -110,4 +110,21 @@ router.get(
   },
 );
 
+// 删除图书信息
+router.get(
+  '/delete',
+  function(req, res, next) {
+    const {fileName} = req.query;
+    if (!fileName) {
+      next(boom.badImplementation(new Error('参数fileName不能为空')));
+    } else {
+      bookService.deleteBook(fileName).then(() => {
+        new Result('删除图书成功').success(res);
+      }).catch(err => {
+        next(boom.badImplementation(err));
+      });
+    }
+  },
+);
+
 module.exports = router;
